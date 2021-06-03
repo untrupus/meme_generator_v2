@@ -96,34 +96,17 @@ const Canvas = props => {
         //     draw();
         // }
 
-        /** =================================================================== */
+        const drawText = () => {
+            for (let i = 0; i < textArray.length; i++) {
+                let y = 50 + (i * 50);
+                context.font = `${textArray[i]?.weight ? 'bold' : ''} ${textArray[i]?.italic ? 'italic' : ''}
+        ${textArray[i] ? textArray[i].fontSize : ''}px Verdana`;
+                context.fillStyle = textArray[i]?.color;
+                context.fillText(textArray[i] ? textArray[i]?.text : '', 100, y);
+            }
+        };
 
-        context.font = `${textArray[0].weight ? 'bold' : ''} ${textArray[0].italic ? 'italic' : ''}
-         ${textArray[0].fontSize}px Verdana`;
-        context.fillStyle = textArray[0].color;
-        context.fillText(textArray[0].text, 100, 50,);
-
-        context.font = `${textArray[1]?.weight ? 'bold' : ''} ${textArray[1]?.italic ? 'italic' : ''}
-        ${textArray[1] ? textArray[1].fontSize : ''}px Verdana`;
-        context.fillStyle = textArray[1]?.color;
-        context.fillText(textArray[1] ? textArray[1]?.text : '', 100, 100,);
-
-        context.font = `${textArray[2]?.weight ? 'bold' : ''} ${textArray[2]?.italic ? 'italic' : ''}
-        ${textArray[2] ? textArray[2].fontSize : ''}px Verdana`;
-        context.fillStyle = textArray[2]?.color;
-        context.fillText(textArray[2] ? textArray[2]?.text : '', 100, 150,);
-
-        context.font = `${textArray[3]?.weight ? 'bold' : ''} ${textArray[3]?.italic ? 'italic' : ''}
-        ${textArray[3] ? textArray[3].fontSize : ''}px Verdana`;
-        context.fillStyle = textArray[3]?.color;
-        context.fillText(textArray[3] ? textArray[3]?.text : '', 100, 200,);
-
-        context.font = `${textArray[4]?.weight ? 'bold' : ''} ${textArray[4]?.italic ? 'italic' : ''}
-        ${textArray[4] ? textArray[4].fontSize : ''}px Verdana`;
-        context.fillStyle = textArray[4]?.color;
-        context.fillText(textArray[4] ? textArray[4]?.text : '', 100, 250,);
-
-        /** =================================================================== */
+        drawText();
 
         const dataURL = canvas.toDataURL('image/jpeg', 1.0);
         dispatch(getDataUrl(dataURL));
