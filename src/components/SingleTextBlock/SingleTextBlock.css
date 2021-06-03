@@ -1,0 +1,42 @@
+.addTextBlock {
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.field {
+    padding: 10px;
+}
+
+.sizeField {
+    width: 50px;
+}
+
+.textField {
+    width: 60%;
+}
+
+.colorField {
+    height: 38px;
+    padding: 10px;
+}
+
+.removeBtn {
+    padding: 10px;
+    color: red;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.boldBtn {
+    font-weight: bold;
+    color: black;
+    text-decoration: underline;
+}
+
+.italicBtn {
+    font-weight: bold;
+    color: black;
+    font-style: italic;
+    font-family: 'Tahoma', serif;
+    padding: 9px 10px 10px;
+}

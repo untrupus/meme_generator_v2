@@ -1,0 +1,11 @@
+.memesList {
+    width: 1200px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.memesListInner {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}

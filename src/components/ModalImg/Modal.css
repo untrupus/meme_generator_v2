@@ -1,0 +1,20 @@
+.modalImg {
+    width: 800px;
+    height: auto;
+}
+
+.closeBtn {
+    display: block;
+    margin: 0 auto;
+    width: 100%;
+    padding: 10px;
+    background-color: darkcyan;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.closeBtn:hover {
+    background-color: #03a3a3;
+}

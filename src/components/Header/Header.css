@@ -1,0 +1,17 @@
+.header {
+    background: darkcyan;
+    padding: 20px;
+    text-align: center;
+    margin: 0;
+}
+
+.headerTitle {
+    text-transform: uppercase;
+    color: #ffffff;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.headerTitle:hover {
+    text-decoration: underline;
+}

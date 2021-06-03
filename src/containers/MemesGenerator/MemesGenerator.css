@@ -1,0 +1,45 @@
+.generator {
+    width: 1200px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.generatorInner {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    border-top: 1px solid darkgrey;
+    padding-top: 20px;
+}
+
+.imgBlock {
+    width: 49%;
+}
+
+.originalImg {
+    width: 100%;
+    height: auto;
+}
+
+.changeBlock {
+    width: 49%;
+    border: 1px solid darkgrey;
+    border-radius: 5px;
+    padding: 20px;
+}
+
+.addBtn {
+    background-color: darkcyan;
+    color: white;
+    padding: 10px 20px;
+    margin: 10px auto;
+    display: block;
+    width: 50%;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.addBtn:hover {
+    background-color: #03a3a3;
+}
