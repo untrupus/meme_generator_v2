@@ -1,150 +1,130 @@
-import React, {useRef, useEffect} from 'react';
-import {useDispatch} from "react-redux";
-import {getDataUrl} from "../../store/actions";
+import React, { useRef, useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { getDataUrl } from "../../store/actions";
+import PropTypes from "prop-types";
 
-const Canvas = props => {
-    const dispatch = useDispatch();
-    const canvasRef = useRef(null);
-    const textArray = props.textArray;
+const Canvas = (props) => {
+  const dispatch = useDispatch();
+  const textArray = props.textArray;
+  const canvas = useRef();
+  let ctx;
+  let img;
+  const positions = [
+    { x: 100, y: 100, w: 100, h: 50 },
+    { x: 100, y: 150, w: 100, h: 50 },
+    { x: 100, y: 200, w: 100, h: 50 },
+    { x: 100, y: 250, w: 100, h: 50 },
+    { x: 100, y: 300, w: 100, h: 50 },
+  ];
+  let isDown = false;
+  let dragTarget = null;
+  let startX = null;
+  let startY = null;
+  let dataURL = null;
 
-    useEffect(() => {
+  useEffect(() => {
+    const canvasEle = canvas.current;
+    ctx = canvasEle.getContext("2d");
+    img = new Image();
+    img.crossOrigin = "Anonymous";
+    img.src = props.url;
+    canvasEle.width = img.width;
+    canvasEle.height = img.height;
+    dataURL = canvasEle.toDataURL("image/jpeg", 1.0);
+    dispatch(getDataUrl(dataURL));
+    draw();
+  }, [textArray]);
 
-        const canvas = canvasRef.current;
-        const context = canvas.getContext('2d');
-
-        const img = new Image();
-        img.crossOrigin = "Anonymous";
-        img.src = props?.url;
-
-        canvas.width = img.width;
-        canvas.height = img.height;
-
-        context.drawImage(img, 0, 0);
-
-        // const texts = [];
-        //
-        // for (let i = 0; i < textArray.length; i++) {
-        //     texts.push({text: textArray[i].text, x: 20, y: 150})
-        // }
-        //
-        // context.font = "36px verdana";
-        //
-        // for (let i = 0; i < texts.length; i++) {
-        //     let text = texts[i];
-        //     text.width = context.measureText(text.text).width;
-        //     text.height = 16;
-        // }
-        //
-        // let selectedText = -1;
-        //
-        // const draw = () => {
-        //     for (let i = 0; i < texts.length; i++) {
-        //         let text = texts[i];
-        //         context.fillStyle = "#CCCCCC";
-        //         context.fillStyle = "blue";
-        //         context.fillText(text.text, text.x, text.y);
-        //         context.fill();
-        //     }
-        // }
-        //
-        // draw();
-        //
-        // const textHit = (x, y, textIndex) => {
-        //     let text = texts[textIndex];
-        //     return (x >= text.x && x <= text.x + text.width && y >= text.y - text.height && y <= text.y);
-        // }
-        //
-        // const handleMouseDown = (e) => {
-        //     e.preventDefault();
-        //     startX = e.clientX - offsetX;
-        //     startY = e.clientY - offsetY;
-        //     console.log('asd')
-        //     for (let i = 0; i < texts.length; i++) {
-        //         if (textHit(startX, startY, i)) {
-        //             selectedText = i;
-        //         }
-        //     }
-        // }
-        //
-        // const handleMouseUp = (e) => {
-        //     e.preventDefault();
-        //     selectedText = -1;
-        //
-        // }
-        //
-        // const handleMouseOut = (e) => {
-        //     e.preventDefault();
-        //     selectedText = -1;
-        // }
-        //
-        // const handleMouseMove = (e) => {
-        //     if (selectedText < 0) {
-        //         return;
-        //     }
-        //     e.preventDefault();
-        //     let mouseX = e.clientX - offsetX;
-        //     let mouseY = e.clientY - offsetY;
-        //
-        //     let dx = mouseX - startX;
-        //     let dy = mouseY - startY;
-        //     startX = mouseX;
-        //     startY = mouseY;
-        //
-        //     let text = texts[selectedText];
-        //     text.x += dx;
-        //     text.y += dy;
-        //     draw();
-        // }
-
-        const drawText = () => {
-            for (let i = 0; i < textArray.length; i++) {
-                let y = 50 + (i * 50);
-                context.font = `${textArray[i]?.weight ? 'bold' : ''} ${textArray[i]?.italic ? 'italic' : ''}
-        ${textArray[i] ? textArray[i].fontSize : ''}px Verdana`;
-                context.fillStyle = textArray[i]?.color;
-                context.fillText(textArray[i] ? textArray[i]?.text : '', 100, y);
-            }
-        };
-
-        drawText();
-
-        const dataURL = canvas.toDataURL('image/jpeg', 1.0);
-        dispatch(getDataUrl(dataURL));
-
-    }, [textArray, props.url, dispatch]);
-
-
-    // const $canvas = document.getElementById('canvas');
-    // const canvasOffset = $canvas.offsetParent;
-    // const offsetX = canvasOffset.left;
-    // const offsetY = canvasOffset.top;
-    // const scrollX = $canvas.scrollLeft;
-    // const scrollY = $canvas.scrollTop;
-
-    // let startX;
-    // let startY;
-    //
-    // const handleMouseDown = (e) => {
-    //     e.preventDefault();
-    //     startX = e.clientX - offsetX;
-    //     startY = e.clientY - offsetY;
-    //     console.log(e.clientX)
-    //     // for (let i = 0; i < texts.length; i++) {
-    //     //     if (textHit(startX, startY, i)) {
-    //     //         selectedText = i;
-    //     //     }
-    //     // }
-    // }
-
-    return (
-        <canvas
-            ref={canvasRef}
-            // onMouseDown={(e) => handleMouseDown(e)}
-            width={588}
-            height={500}
-            style={{width: '588px', height: 'auto'}}
-            id='canvas'/>
+  const draw = () => {
+    ctx.clearRect(
+      0,
+      0,
+      canvas.current.clientWidth,
+      canvas.current.clientHeight
     );
-}
+    ctx.drawImage(img, 0, 0);
+    for (let i = 0; i < textArray.length; i++) {
+      drawText(positions[i], textArray[i]);
+    }
+  };
 
-export default Canvas
+  const drawText = (pos, arr) => {
+    const { x, y, w, h } = pos;
+    ctx.beginPath();
+    ctx.fillStyle = "transparent";
+    ctx.fillRect(x, y, w, h);
+    ctx.font = `${arr?.weight ? "bold" : ""} ${arr?.italic ? "italic" : ""}
+        ${arr ? arr.fontSize : ""}px Verdana`;
+    ctx.fillStyle = arr.color;
+    ctx.fillText(arr.text, x, y + 30);
+  };
+
+  const hitBox = (x, y) => {
+    let isTarget = null;
+    for (let i = 0; i < positions.length; i++) {
+      const box = positions[i];
+      if (x >= box.x && x <= box.x + 40 && y >= box.y && y <= box.y + 40) {
+        dragTarget = box;
+        isTarget = true;
+        break;
+      }
+    }
+    return isTarget;
+  };
+
+  const handleMouseDown = (e) => {
+    startX = e.nativeEvent.offsetX - canvas.current.clientLeft;
+    startY = e.nativeEvent.offsetY - canvas.current.clientTop;
+    isDown = hitBox(startX, startY);
+  };
+
+  const handleMouseMove = (e) => {
+    if (!isDown) return;
+    const mouseX = e.nativeEvent.offsetX - canvas.current.clientLeft;
+    const mouseY = e.nativeEvent.offsetY - canvas.current.clientTop;
+    const dx = mouseX - startX;
+    const dy = mouseY - startY;
+    startX = mouseX;
+    startY = mouseY;
+    dragTarget.x += dx;
+    dragTarget.y += dy;
+    draw();
+  };
+  const handleMouseUp = (e) => {
+    console.log(e);
+    dragTarget = null;
+    isDown = false;
+  };
+  const handleMouseOut = (e) => {
+    handleMouseUp(e);
+  };
+  return (
+    <canvas
+      // width={588}
+      // height={500}
+      onMouseDown={handleMouseDown}
+      onMouseMove={handleMouseMove}
+      onMouseUp={handleMouseUp}
+      onMouseOut={handleMouseOut}
+      ref={canvas}
+      // style={{ width: "588px", height: "auto" }}
+    ></canvas>
+  );
+};
+
+Canvas.propTypes = {
+  textArray: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string,
+      text: PropTypes.string.isRequired,
+      name: PropTypes.string.isRequired,
+      color: PropTypes.string.isRequired,
+      fontSize: PropTypes.string.isRequired,
+      weight: PropTypes.bool.isRequired,
+      italic: PropTypes.bool.isRequired,
+    })
+  ).isRequired,
+  url: PropTypes.string,
+};
+
+export default Canvas;
