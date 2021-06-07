@@ -1,10 +1,10 @@
 import React, { useRef, useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { getDataUrl } from "../../store/actions";
+// import { useDispatch } from "react-redux";
+// import { getDataUrl } from "../../store/actions";
 import PropTypes from "prop-types";
 
 const Canvas = (props) => {
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   const textArray = props.textArray;
   const canvas = useRef();
   let ctx;
@@ -20,7 +20,7 @@ const Canvas = (props) => {
   let dragTarget = null;
   let startX = null;
   let startY = null;
-  let dataURL = null;
+  // let dataURL = null;
 
   useEffect(() => {
     const canvasEle = canvas.current;
@@ -30,9 +30,9 @@ const Canvas = (props) => {
     img.src = props.url;
     canvasEle.width = img.width;
     canvasEle.height = img.height;
-    dataURL = canvasEle.toDataURL("image/jpeg", 1.0);
-    dispatch(getDataUrl(dataURL));
     draw();
+    // dataURL = canvasEle.toDataURL("image/jpeg", 1.0);
+    // dispatch(getDataUrl(dataURL));
   }, [textArray]);
 
   const draw = () => {
@@ -91,7 +91,6 @@ const Canvas = (props) => {
     draw();
   };
   const handleMouseUp = (e) => {
-    console.log(e);
     dragTarget = null;
     isDown = false;
   };
